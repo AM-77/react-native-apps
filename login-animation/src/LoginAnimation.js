@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Image } from 'react-native'
-import LoginAnimation from './src/LoginAnimation'
+import { StyleSheet, Text, Image } from 'react-native'
+
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
 
@@ -14,7 +14,7 @@ function cacheImages(images) {
   })
 }
 
-export default class App extends Component {
+export default class LoginAnimation extends Component {
 
   constructor(props) {
     super(props)
@@ -25,7 +25,7 @@ export default class App extends Component {
 
   async loadAssetsAsync() {
     const imageAssets = cacheImages([
-      require("./assets/background.jpg")
+      require("../assets/background.jpg")
     ])
 
     await Promise.all([...imageAssets])
@@ -40,6 +40,10 @@ export default class App extends Component {
         onError={console.warn} />
     }
     
-    return <LoginAnimation />
+    return (
+      <div>
+        
+      </div>
+    )
   }
 }
