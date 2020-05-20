@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Image } from 'react-native'
-import LoginAnimation from './src/LoginAnimation'
+import Login from './src/Login'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
 
@@ -40,6 +40,6 @@ export default class App extends Component {
         onError={console.warn} />
     }
     
-    return <LoginAnimation />
+    return <Login />
   }
 }
