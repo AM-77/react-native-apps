@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import Constants from 'expo-constants'
+import colors from '../assets/colors'
 import PickedImages from './PickedImages'
 import Send from './svgs/Send'
 import Upload from './svgs/Upload'
@@ -39,7 +40,7 @@ export default class PostThought extends Component<unknown, IState> {
   now = ():string => new Date().toUTCString()
 
   postThought = () => {
-
+    // TODO: posting logic
   }
 
   pickImage = async () => {  
@@ -71,24 +72,26 @@ export default class PostThought extends Component<unknown, IState> {
           </View>
           <View style={styles.postContainer}>
               <View style={styles.inputContainer}>
-                <TextInput
+                <TextInput                  
                   style={styles.input}
-                  multiline={true}
-                  onChangeText={(thought) => this.setState({thought})}
-                  value={thought}/>
+                  underlineColorAndroid="transparent"
+                  placeholder="post your thoughts"
+                  placeholderTextColor="grey"
+                  numberOfLines={10}
+                  multiline={true}/>
               </View>
               <View style={styles.btns}>
-                <TouchableOpacity style={styles.btn} onPress={this.pickImage}>
-                  <Upload width={40} height={40} fill="#119955" />
+                <TouchableOpacity onPress={this.pickImage}>
+                  <Upload width={27} height={27} fill={colors.main} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={this.postThought}>
-                  <Send width={40} height={40} fill="#119955" />
+                <TouchableOpacity onPress={this.postThought}>
+                  <Send width={27} height={27} fill={colors.main} />
                 </TouchableOpacity>
-              </View>
-              <View style={styles.images}>
-                <PickedImages images={images} removeImage={this.removeImage} />
               </View>
           </View>
+        </View>
+        <View style={styles.images}>
+          <PickedImages images={images} removeImage={this.removeImage} />
         </View>
       </View>
     )
@@ -97,42 +100,79 @@ export default class PostThought extends Component<unknown, IState> {
 
 const styles = StyleSheet.create({
   postThoughtContainer: {
-    
+    marginTop: 15
   },
   header: {
-
+    color: colors.light,
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 17
   },
   post: {
-
+    borderColor: colors.gray,
+    borderStyle: 'dotted',
+    borderWidth: 2,
+    marginTop: 30
   },
   labels: {
-
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    position: 'absolute',
+    top: -12,
   },
   title: {
-
+    paddingLeft: 7,
+    paddingRight: 7,
+    marginLeft: 10,
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.main,
+    backgroundColor: colors.dark,
   },
   time: {
-
+    paddingLeft: 7,
+    paddingRight: 7,
+    marginRight: 10,
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.main,
+    backgroundColor: colors.dark
   },
   postContainer: {
-
+    position: 'relative'
   },
   inputContainer: {
-
+    
   },
   input: {
-    fontSize: 13,
-    lineHeight: 1.7,
-    outline: 'none',
-    height: 100
+    fontSize: 14,
+    textAlignVertical: 'top',
+    height: 100,
+    padding: 10,
+    color: colors.light
   },
   btns: {
-
-  },
-  btn: {
-
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 76,
+    height: 35,
+    paddingLeft: 5,
+    paddingTop: 5,
+    borderWidth: 2,
+    borderLeftColor: colors.gray,
+    borderTopColor: colors.gray,
+    borderRightColor: colors.dark,
+    borderBottomColor: colors.dark,
+    backgroundColor: colors.dark
   },
   images: {
-
+    marginTop: 5
   }
 })
