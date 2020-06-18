@@ -1,19 +1,28 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { StyleSheet, ScrollView, Text, View } from 'react-native'
+import Constants from 'expo-constants'
+import PostThought from './components/PostThought'
+import ThoughtList from './components/ThoughtList'
+import colors from './assets/colors'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <View style={styles.appContainer}>
+      <ScrollView style={styles.appScrollView}>
+        <PostThought />
+        <ThoughtList />
+      </ScrollView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: colors.dark,
+    paddingTop: Constants.statusBarHeight,
   },
-});
+  appScrollView: {
+    flex: 1
+  }
+})
