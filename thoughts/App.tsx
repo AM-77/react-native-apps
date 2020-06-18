@@ -21,6 +21,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.dark,
     paddingTop: Constants.statusBarHeight,
+    paddingRight: 15,
+    paddingLeft: 15
   },
   appScrollView: {
     flex: 1
