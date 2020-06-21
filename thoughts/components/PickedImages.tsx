@@ -3,9 +3,8 @@ import { StyleSheet, View, Image, TouchableOpacity, ScrollView } from 'react-nat
 
 import Remove from './svgs/Remove'
 
-type PickedImage = { uri: string,  base64: string }
 interface IProps {
-  images: PickedImage[]
+  images: string[]
   removeImage: (index: number) => void
 }
 
@@ -15,9 +14,9 @@ export default class PickedImages extends Component<IProps> {
     return (
       <ScrollView horizontal style={styles.images}>
         {
-          images.map(({ uri }, index) => (
+          images.map((image, index) => (
             <View key={index} style={styles.imageContainer}>
-              <Image source={{ uri }} style={styles.image} />
+              <Image source={{ uri: image }} style={styles.image} />
               <TouchableOpacity style={styles.removeBtn} onPress={() => removeImage(index)}>
                 <Remove height={20} width={20} />
               </TouchableOpacity>
