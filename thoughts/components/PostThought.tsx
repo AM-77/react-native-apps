@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native'
+import IThought from '../interfaces/Thought.interface'
 import * as ImagePicker from 'expo-image-picker'
 import Constants from 'expo-constants'
 import colors from '../assets/colors'
@@ -7,19 +8,24 @@ import PickedImages from './PickedImages'
 import Send from './svgs/Send'
 import Upload from './svgs/Upload'
 
-type PickedImage = { uri: string,  base64: string }
-interface IState {
-  thought: string
-  time: string
-  images: PickedImage[]
+interface IProps {
+  writeThought: (thought: IThought) => void
 }
 
-export default class PostThought extends Component<unknown, IState> {
+interface IState {
+  content: string
+  time: string
+  images: string[]
+}
 
-  constructor(props: unknown) {
+const arabicUnicodeRange = /[\u0600-\u06FF]/
+
+export default class PostThought extends Component<IProps, IState> {
+
+  constructor(props: IProps) {
     super(props)
     this.state = { 
-      thought: "",
+      content: "",
       time: this.now(),
       images: []
     }
@@ -38,10 +44,7 @@ export default class PostThought extends Component<unknown, IState> {
   }
 
   now = ():string => new Date().toUTCString()
-
-  postThought = () => {
-    // TODO: posting logic
-  }
+  isArabic = (content: string): {} => (arabicUnicodeRange.test(content)) ? { textAlign: "right" } : {}
 
   pickImage = async () => {  
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,7 +54,10 @@ export default class PostThought extends Component<unknown, IState> {
       quality: 1,
     })
 
-    if (!result.cancelled) this.setState((state) => ({ images: [...state.images, { uri: result.uri, base64: result.base64 }] }))
+    if (!result.cancelled) {
+      const ext = result.uri.slice(result.uri.lastIndexOf(".") + 1)
+      this.setState((state) => ({ images: [...state.images, 'data:image/' + ext + ';base64,' + result.base64] }))
+    }
   }
 
   removeImage = (index: number) => {
@@ -60,8 +66,25 @@ export default class PostThought extends Component<unknown, IState> {
     this.setState(({ images }))
   }
 
+  onInputChange = (content: string) => { this.setState({content}) }
+
+  postThought = () => {
+    const { writeThought } = this.props
+    const { content, time, images } = this.state
+
+    if (content.length > 0 || images.length > 0) {
+      writeThought({ content, time, images })
+
+      this.setState({
+        content: '',
+        time: new Date().toUTCString(),
+        images: []
+      })
+    }
+  }
+
   render() {
-    const { thought, time, images } = this.state
+    const { content, time, images } = this.state
     return (
       <View style={styles.postThoughtContainer}>
         <Text style={styles.header}>Thoughts, quotes & stuff.</Text>
@@ -73,10 +96,11 @@ export default class PostThought extends Component<unknown, IState> {
           <View style={styles.postContainer}>
               <View style={styles.inputContainer}>
                 <TextInput                  
-                  style={styles.input}
+                  style={{...styles.input, ...this.isArabic(content)}}
                   underlineColorAndroid="transparent"
                   placeholder="post your thoughts"
                   placeholderTextColor="grey"
+                  onChangeText={this.onInputChange}
                   numberOfLines={10}
                   multiline={true}/>
               </View>
@@ -130,6 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.main,
     backgroundColor: colors.dark,
+    textDecorationLine: 'underline'
   },
   time: {
     paddingLeft: 7,
@@ -138,7 +163,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: colors.main,
-    backgroundColor: colors.dark
+    backgroundColor: colors.dark,
+    textDecorationLine: 'underline'
   },
   postContainer: {
     position: 'relative'
